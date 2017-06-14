@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>WebRTC</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		 <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="dataTables/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="dataTables/css/dataTables.scroller.css">
+		<link rel="stylesheet" href="uiStyle.css">
+
+		<!-- Optional: Include the jQuery library -->
+		<script src="jquery/jquery.min.js"></script>
+
+		<!-- Optional: Incorporate the Bootstrap JavaScript plugins -->
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script src="dataTables/js/jquery.dataTables.min.js"></script>
+
+        <!-- Angular JS modules -->
+		<script src="angularjs/angular.min.js"></script>
+        <script src="angularjs/angular-datatables.min.js"></script>
+        <script src="dataTables.scroller.js"></script>
+        <script src="x2js/xml2json.js"></script>
+
+		<!-- Base Code -->
+		<script src="webrtc.js"></script>
+		<script src="controller.js"></script>
+		<!--<script src="kodiakplugin.js"></script>
+        <script src="contactmanagement.js"></script>
+		<script src="SipMessageHandler.js"></script>
+		<script src="knmbcp.js"></script>
+		<script src="sip.js"></script>-->
+
+	</head>
+	<body data-ng-app="myApp">
+
+		<div class="container-fluid">
+            <div class="dummy hide" data-ng-controller="loginHandler"></div>
+
+
+<div class="row" data-ng-controller="selfDetialsController">
+<div class="col-sm-12">
+<div class="col-sm-12 header table-thead1">
+<div class="col-sm-3"><img height="40px" src="image/sjbit-logo.jpg"/></div>
+<div class="col-sm-9 ">
+
+<div class="text-center">
+    <div class="col-sm-6 col-md-4 col-md-offset-2">
+            <span><strong>Name:</strong></span>
+            <span id="subscriber-name"></span>
+    </div>
+    <!-- <div class="col-sm-6 col-md-4">
+            <span><strong>Presence:</strong></span>
+            <img data-ng-bind="presence"></span>
+    </div> -->
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="content row">
+	<div class="col-sm-5 col-md-4">
+	            <div class="left-first row" data-ng-controller="callActivityCtrl">
+						<div class="first-1 col-sm-12">
+							<span class="col-xs-12 table-thead" id="Call-Handle">Call Activity</span>
+						</div>
+						<div class="first-2 font2 col-sm-12">
+                            <div class="first-2-inner inner-content-gradient col-xs-12 col-sm-12">
+							<div class="col-sm-5 col-xs-12">
+							<img id="call_icon" class="img-circle col-sm-11 col-xs-1" ng-src="./image/idle.png" ng-click="floorController()" data-toggle="tooltip" data-placement="top" title="FLOOR CONTROL / CALL"></img>
+								<span class="col-sm-1 start-call col-xs-2">
+								<a class="btn btn-lg">
+									<span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+								</a>
+								</span>
+							</div>
+							<div class="col-sm-7 col-xs-12 font3">
+								<div class="row">
+									<div class=" end-call col-sm-12 col-xs-4">
+										<a id="aendCall" style="padding-bottom:3px; margin-left:-10px" class="btn btn-lg" data-toggle="tooltip" data-placement="top" title="END CALL">
+											<img width=25 id="endcall" ng-src="./image/end_call.png" ng-click="endCall()"></img>
+										</a>
+									</div>
+								</div>
+								<div class="row">
+									<div style="padding-right:5px;" class="caller-data col-sm-12">
+										<ul class="list-group">
+										  <li class="list-group-item">
+											<span id="talker-mdn" class="badge">None</span>
+											Talker&nbsp;:
+										  </li>
+										  <li class="list-group-item">
+											<span id="talker-name" class="badge">None</span>
+											Name&nbsp;:
+										  </li>
+										<!--  <li class="list-group-item">
+											<div class="input-group">
+											  <label style="padding-right:5px;" class="font3">Members:</label>
+											  <div class="input-group-btn">
+												<button aria-expanded="false" data-toggle="dropdown" class="btn btn-default dropdown-toggle btn-xs" type="button">Action <span class="caret"></span></button>
+												<ul role="menu" class="dropdown-menu dropdown-menu-right">
+												  <li><a href="#">Members</a></li>
+												</ul>
+											  </div>
+											</div>
+
+
+										  </li>-->
+										</ul>
+									</div>
+
+
+								</div>
+
+							</div>
+						</div>
+                        </div>
+					</div>
+					<!--<div class="left-second row">
+						<div class="first-1">
+						Alerts
+						</div>
+					</div>-->
+					<div class="left-third font1 row">
+					  <div class="first-1 col-sm-12">
+						<span class="col-xs-12 table-thead">Alerts</span>
+					  </div>
+					  <div  class="ContactGroup col-xs-12" id="IPA" data-ng-controller="IPACtrl">
+
+                        <div id="notification" class="notification alert fade col-sm-4" role="alert">
+                                <button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> <strong>{{notification.type}}</strong> {{notification.body}}.
+                        </div>
+
+						<table class="table table-responsive table-hover table-striped compact" datatable="ng" dt-options="dtOptions">
+							<thead>
+							<tr>
+								<th width="20%" class="text-center"></th>
+								<th width="30%" class="text-center">Name</th>
+								<th width="50%" class="text-center">Time</th>
+							</tr>
+							</thead>
+<!--						</table>
+						<div class="col-sm-12 table-ContactGroup-body" data-spy="scroll" data-target="#table-ContactGroup" data-offset="0">
+							<div class="row">
+								<table class="table table-responsive table-hover table-striped compact">-->
+									<tbody>
+									<tr data-ng-repeat="ipa in IPAS">
+                                        <td class="text-center"><img ng-init="nguserclass={0:'IPA',1:'MISSEDCALL'}; ipa.type=0" ng-src="image/IPA.png" data-toggle="tooltip" data-placement="top" title="IPA"></img></td>
+										<td width="30%" class="text-center">{{ipa.name}}</td>
+										<td width="50%" class="text-center">{{ipa.time != null?ipa.time: current_time | date:'dd-MM-yyyy HH:mm a'}}</td>
+									</tr>
+									</tbody>
+								</table>
+	<!--						</div>
+						</div>-->
+
+					  </div>
+					</div>
+					<div class="left-fourth font1 row" >
+						<div class="first-1 col-sm-12">
+							<span class="col-xs-12 table-thead">Contacts and Groups</span>
+						</div>
+						<div class="col-sm-12">
+							<ul id="myTab" class="nav nav-tabs">
+							  <li class="active"><a href="#contacts" data-toggle="tab"><button type="button" class="btn btn-default btn-xs">Contacts</button></a></li>
+							  <li><a href="#groups"  data-toggle="tab"><button type="button" class="btn btn-default btn-xs">Groups</button></a></li>
+
+							</ul>
+							<div id="myTabContent" class="tab-content" >
+
+							  <div class="tab-pane fade in active" id="contacts" data-ng-controller="contactsCtrl">
+                                    <div class="btn-group pull-right" role="group">
+                                                <button type="button" class="btn btn-default btn-sm" ng-click="sendIPA()" data-toggle="tooltip" data-placement="top" title="IPA">
+                                                        <img src="image/IPA.png"/>
+                                                </button>
+                                    </div>
+								<table class="table table-responsive table-hover table-striped compact cell-border" dt-options="dtOptions" datatable="ng">
+							<!--	<table ng-table class="table table-responsive table-hover table-striped compact cell-border"> -->
+									<thead>
+									<tr>
+										<th class="text-center"><input type="checkbox" ng-init="contact_check_all=false" class="check-all" ng-model="contact_check_all" ng-click="checkAll();"></th>
+										<th></th>
+                                        <!--<th></th>-->
+										<!--<th class="text-center">Id</th>-->
+										<th class="text-center">Name</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr data-ng-repeat="contact in contacts">
+										<td class="text-center"><input class="contact-check" ng-init="contact.active=false" ng-model="contact.active" type="checkbox" ng-click="contactSelect(contact,$event)" ></td>
+                                        <!--<td class="text-center"><span ng-init="ngsendclass={1:'alert-success',0:'alert-danger'}" class="glyphicon glyphicon-send" ng-class="ngsendclass[contact.send]" aria-hidden="true"></span></td>-->
+										<td class="text-center"><img ng-init="nguserclass={2:'Offline',3:'Online',4:'DnD'}; ngtooltiptitle={2:'Offline',3:'Online',4:'DnD'}" ng-src="image/{{nguserclass[contact.availabilityStatus]}}.png" data-toggle="tooltip" data-placement="top" title="{{ngtooltiptitle[contact.availabilityStatus]}}"></img></td>
+										<!--<td class="text-center">{{contact.id}}</td>-->
+										<td class="text-center">{{contact.name}}</td>
+									</tr>
+									</tbody>
+
+								</table>
+							  </div>
+							  <div class="tab-pane fade" id="groups" data-ng-controller="usersCtrl">
+								  <table id="table-groups" class="table table-responsive table-hover table-striped compact cell-border ">
+										<thead>
+											<tr>
+												<th class="text-center"><input type="checkbox" ng-init="group_check_all=false" ng-model="group_check_all" ng-click="checkAllGroup();"></th>
+												<th></th>
+												<th></th>
+												<th class="text-center">Id</th>
+												<th class="text-center">Group Name</th>
+												<th class="text-center">Group Members</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr data-ng-repeat="group in groups">
+												<td class="text-center"><input class="grptoggle" id="{{group.id}}" type="checkbox" ng-click="showMembers(group,this)" data-toggle="collapse" data-target="#grp{{group.id}}" aria-expanded="true" aria-controls="grp{{group.id}}" ></td>
+												<td>
+													<span ng-if="group.send==1" class="glyphicon glyphicon-send alert-success" aria-hidden="true"></span>
+													<span ng-if="group.send==0" class="glyphicon glyphicon-send alert-danger" aria-hidden="true"></span>
+												</td>
+												<td>
+													<span ng-if="group.user==1" class="glyphicon glyphicon-user alert-success" aria-hidden="true"></span>
+													<span ng-if="group.user==0" class="glyphicon glyphicon-user alert-danger" aria-hidden="true"></span>
+												</td>
+												<td class="text-center">{{group.id}}</td>
+												<td class="text-center">{{group.firstName + " " + group.lastName}}</td>
+												<td class="text-center"><ul class="collapse" style="list-style:none;padding:0;margin:0;" id="grp{{group.id}}" ><li class="" data-ng-repeat="member in group.members">{{member.name}}</li></ul></td>
+											</tr>
+										</tbody>
+									</table>
+
+							  </div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="right-content col-sm-7 col-md-8">
+
+					<div class="right-first row">
+						<div class="first-1 col-sm-12">
+							<span class="col-xs-12 table-thead">Map</span>
+						</div>
+						<div class="col-sm-12">
+							<iframe src="" width="100%" height="620" frameborder="0" style="border:0"></iframe>
+						</div>
+					</div>
+
+
+				</div>
+
+			</div>
+			<div class="footer row">
+			</div>
+		</div>
+
+<!-- POPUP to show the login form -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-ng-controller="loginController">
+                                  <div class="modal-dialog modal-sm">
+                                                <div class="modal-content">
+                                                  <div class="modal-header text-center header1">
+                                                                <img src="image/sjbit-logo.jpg"/>
+
+                                                  </div>
+
+                                                   <div class="col-sm-12">
+                                                                                <span class="header2 col-sm-12 text-center table-thead">Call On WebRTC</span>
+                                                                </div>
+
+                                                  <form name="loginform" class="form-horizontal" role="form">
+                                                                  <div class="modal-body">
+                                                                                  <div class="form-group form-group-sm text-center">
+                                                                                                <span class="login-body-header">Login to your Account</span>
+                                                                                  </div>
+                                                                                  <div class="form-group form-group-sm">
+
+                                                                                                <div class="col-sm-12">
+                                                                                                  <input type="text" class="form-control font1" id="username" placeholder="Username" data-ng-model="user.userName">
+                                                                                                </div>
+                                                                                  </div>
+                                                                                  <div class="form-group form-group-sm">
+
+                                                                                                <div class="col-sm-12">
+                                                                                                  <input type="password" class="form-control font1" id="pwd" placeholder="Password" data-ng-model="user.passWord">
+                                                                                                </div>
+                                                                                  </div>
+
+
+                                                                  </div>
+                                                                  <div class="modal-footer">
+
+                                                                                <button type="button" class="btn btn-primary btn-sm table-thead" data-dismiss="modal" data-ng-click="submit_form();">Submit</button>
+                                                                  </div>
+                                                  </form>
+                                                </div>
+                                  </div>
+                                </div>
+
+
+
+                <!-- POPUP to show the login form
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-ng-controller="loginController">
+                  <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                      <div class="modal-header text-center header1">
+
+                        <h4 class="modal-title" id="myModalLabel">Login</h4>
+                      </div>
+                      <form name="loginform" class="form-horizontal" role="form">
+                          <div class="modal-body">
+
+                              <div class="form-group form-group-sm">
+                                <label class="control-label col-sm-3 font1 normal-font" for="username">Username</label>
+                                <div class="col-sm-9">
+                                  <input type="text" class="form-control font1" id="username" placeholder="Enter username" data-ng-model="user.userName">
+                                </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                <label class="control-label col-sm-3 font1 normal-font" for="pwd">Password</label>
+                                <div class="col-sm-9">
+                                  <input type="password" class="form-control font1" id="pwd" placeholder="Enter password" data-ng-model="user.passWord">
+                                </div>
+                              </div>
+
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" data-ng-click="submit_form();">Submit</button>
+                          </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>-->
+
+
+
+<!-- loader image popup -->
+<div class="modal fade" id="myloaderModal" tabindex="-1" role="dialog" aria-labelledby="myloaderModalLabel" aria-hidden="true" >
+<div class="modal-dialog">
+<div style="" class="modal-content">
+  <div class="modal-body">
+    <img src="image/ajax-loader-big.gif"/>
+  </div>
+</div>
+</div>
+</div>
+
+    <video id="localVideo" autoplay="false" style="width: 180px; height: 40px; border: 1px solid black; visibility:hidden" controls muted></video>
+    <video id="remoteVideo" autoplay style="width: 180px; height: 40px; border: 1px solid black; visibility:hidden" controls></video>
+
+	</body>
+
+<script>
+
+var selfView        = document.getElementById("localVideo");
+var remoteView      = document.getElementById("remoteVideo");
+
+
+$(document).ready(function () {
+    $('#myTab a').click(function (e) {
+
+			e.preventDefault();
+			$(this).tab('show');
+
+	});
+
+$("#notification .close").click(function(){
+$("#notification").removeClass('in');
+})
+
+
+    //Login
+    $('#myModal').modal({show:true,backdrop:'static',keyboard:false});
+	$(".modal-dialog").css("margin-top","13%");
+
+    //Progress
+    $("#myloaderModal .modal-dialog").css("margin","20% auto");
+    $("#myloaderModal .modal-dialog").css("width","90px");
+
+    //$('#myloaderModal').modal({show:true,backdrop:"static",keyboard:false});
+
+    //Tool Tip
+    $('[data-toggle="tooltip"]').tooltip();
+
+	$('#table-contacts').dataTable(
+	{
+		//"ajax": "data/objects.js",
+		"scrollY":        "115px",
+        "scrollCollapse": false,
+        "paging":         false,
+        "data":           data,
+		"autoWidth": false,
+
+		ColumnDefs: [
+          { aTargets: [0], bSortable: false },
+          { aTargets: [1], bSortable: false },
+		  { aTargets: [2], bSortable: false }
+        ],
+        aaSorting: [ [3, 'asc'] ]
+	});
+
+
+
+
+
+	$('#table-groups').dataTable(
+	{
+		//"ajax": "data/objects.js",
+		"scrollY":        "115px",
+        "scrollCollapse": false,
+        "paging":         false,
+		"autoWidth": false,
+
+		ColumnDefs: [
+          { aTargets: [0], bSortable: false },
+          { aTargets: [1], bSortable: false },
+		  { aTargets: [2], bSortable: false }
+        ],
+        aaSorting: [ [3, 'asc'] ]
+	});
+
+	$(".dataTables_scrollHeadInner").css("width","100%");
+	$(".dataTables_scrollHeadInner table").css("width","100%");
+});
+</script>
+</html>
